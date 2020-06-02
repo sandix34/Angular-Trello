@@ -9,7 +9,26 @@ import { List } from './shared/models';
 export class AppComponent {
   
   public listLabel = "";
-  public lists: List[] = [];
+  public lists: List[] = [{
+    label: 'list1',
+    items: [
+      {
+        content: 'item 1'
+      },
+      {
+        content: 'item 2'
+      },
+      {
+        content: 'item 3'
+      },
+      {
+        content: 'item 4'
+      },
+      {
+        content: 'item 5'
+      }
+    ]
+  }];
 
   public itemContent = "";
 
@@ -30,5 +49,12 @@ export class AppComponent {
       });
     }
     this.itemContent = "";
+  }
+
+  // inversion des items
+  public switchItems($event: { srcIndex: number, dstIndex: number }) {
+    const tmp = this.lists[0].items[$event.srcIndex];
+    this.lists[0].items[$event.srcIndex] = this.lists[0].items[$event.dstIndex];
+    this.lists[0].items[$event.dstIndex] = tmp;
   }
 }
