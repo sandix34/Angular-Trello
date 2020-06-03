@@ -1,5 +1,7 @@
 # AngularTrello
 
+![trello](https://user-images.githubusercontent.com/44428775/83651398-b99f9e80-a5b9-11ea-8b83-5a41d94c1dc8.gif)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.3.
 
 ## Development server
