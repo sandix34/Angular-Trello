@@ -20,6 +20,16 @@ export class DragDirective {
     }
   }> = new EventEmitter();
 
+  @Output() public transfer: EventEmitter<{
+    src: {
+      itemIndex: number,
+      listIndex: number
+    },
+    dst: {
+      listIndex: number
+    }
+  }> = new EventEmitter();
+
   @HostBinding('draggable') public draggable = true;
   @HostBinding('class.over') public isIn = false;
 
@@ -42,16 +52,28 @@ export class DragDirective {
   // et émettre l'évènement lors du drop
   @HostListener('drop', ['$event']) drop($event) {
     this.isIn = false;
-    this.switch.emit({
-      src: {
-        itemIndex: $event.dataTransfer.getData('itemIndex'),
-        listIndex: $event.dataTransfer.getData('listIndex')
-      },
-      dst: {
-        itemIndex: this.itemIndex,
-        listIndex: this.listIndex
-      }
-    });
+    if (this.itemIndex) {
+      this.switch.emit({
+        src: {
+          itemIndex: $event.dataTransfer.getData('itemIndex'),
+          listIndex: $event.dataTransfer.getData('listIndex')
+        },
+        dst: {
+          itemIndex: this.itemIndex,
+          listIndex: this.listIndex
+        }
+      });
+    } else {
+      this.transfer.emit({
+        src: {
+          itemIndex: $event.dataTransfer.getData('itemIndex'),
+          listIndex: $event.dataTransfer.getData('listIndex')
+        },
+        dst: {
+          listIndex: this.listIndex
+        }
+      });
+    }
   }
 
   // ajout d'un listener sur la directive pour bloquer le comportement par défaut des navigateurs qui empêche le switch
