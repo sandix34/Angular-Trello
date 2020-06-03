@@ -52,9 +52,22 @@ export class AppComponent {
   }
 
   // inversion des items
-  public switchItems($event: { srcIndex: number, dstIndex: number }) {
-    const tmp = this.lists[0].items[$event.srcIndex];
-    this.lists[0].items[$event.srcIndex] = this.lists[0].items[$event.dstIndex];
-    this.lists[0].items[$event.dstIndex] = tmp;
+  public switchItems($event: {
+    src: {
+      itemIndex: number,
+      listIndex: number
+    },
+    dst: {
+      itemIndex: number,
+      listIndex: number
+    }
+  }) {
+    [
+      this.lists[$event.src.listIndex].items[$event.src.itemIndex],
+      this.lists[$event.dst.listIndex].items[$event.dst.itemIndex]
+    ] = [
+      this.lists[$event.dst.listIndex].items[$event.dst.itemIndex],
+      this.lists[$event.src.listIndex].items[$event.src.itemIndex]
+    ]
   }
 }

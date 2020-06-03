@@ -6,9 +6,19 @@ import { Directive, HostBinding, HostListener, Input, Output, EventEmitter } fro
 export class DragDirective {
 
   // récupèrer l'index de l'élément qui est déplacé avec le drag en créant une propriété @Input
-  @Input('index') public index;
+  @Input('itemIndex') public itemIndex;
+  @Input('listIndex') public listIndex;
   // créer un EventEmitter pour transmettre l'index de l'élément draggé à l'index de l'élément sur lequel il est droppé
-  @Output() public switch: EventEmitter<{srcIndex: number, dstIndex: number}> = new EventEmitter();
+  @Output() public switch: EventEmitter<{
+    src: {
+      itemIndex: number,
+      listIndex: number
+    },
+    dst: {
+      itemIndex: number,
+      listIndex: number
+    }
+  }> = new EventEmitter();
 
   @HostBinding('draggable') public draggable = true;
   @HostBinding('class.over') public isIn = false;
@@ -24,7 +34,8 @@ export class DragDirective {
   // l'objet DataTransfer permet de définir des données dragguée
   // dès le début du drag on a accès à l'index de l'élément draggé
   @HostListener('dragstart', ['$event']) dragstart($event) {
-    $event.dataTransfer.setData('srcIndex', this.index);
+    $event.dataTransfer.setData('itemIndex', this.itemIndex);
+    $event.dataTransfer.setData('listIndex', this.listIndex);
   }
 
   // ajout d'une listener permettant de savoir sur élément on droppe l'élément draggé
@@ -32,8 +43,14 @@ export class DragDirective {
   @HostListener('drop', ['$event']) drop($event) {
     this.isIn = false;
     this.switch.emit({
-      srcIndex: +$event.dataTransfer.getData('srcIndex'),
-      dstIndex: this.index
+      src: {
+        itemIndex: $event.dataTransfer.getData('itemIndex'),
+        listIndex: $event.dataTransfer.getData('listIndex')
+      },
+      dst: {
+        itemIndex: this.itemIndex,
+        listIndex: this.listIndex
+      }
     });
   }
 
